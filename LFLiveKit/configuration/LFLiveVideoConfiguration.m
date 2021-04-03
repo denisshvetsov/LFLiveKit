@@ -82,6 +82,19 @@
         configuration.videoSize = CGSizeMake(540, 960);
     }
         break;
+            
+    case LFLiveVideoQuality_Tapplive:{
+            configuration.sessionPreset = LFCaptureSessionPreset540x960;
+            configuration.videoFrameRate = 24;
+            configuration.videoMaxFrameRate = 24;
+            configuration.videoMinFrameRate = 12;
+            configuration.videoBitRate = 800 * 1000;
+            configuration.videoMaxBitRate = 880 * 1000;
+            configuration.videoMinBitRate = 70 * 1000;
+            configuration.videoSize = CGSizeMake(540, 960);
+        }
+        break;
+            
     case LFLiveVideoQuality_Medium3:{
         configuration.sessionPreset = LFCaptureSessionPreset540x960;
         configuration.videoFrameRate = 30;
@@ -130,7 +143,16 @@
         break;
     }
     configuration.sessionPreset = [configuration supportSessionPreset:configuration.sessionPreset];
-    configuration.videoMaxKeyframeInterval = configuration.videoFrameRate*2;
+    switch (videoQuality) {
+        case LFLiveVideoQuality_Tapplive:{
+            configuration.videoMaxKeyframeInterval = configuration.videoFrameRate*1;
+        }
+        break;
+        default:
+            configuration.videoMaxKeyframeInterval = configuration.videoFrameRate*2;
+        break;
+    }
+    
     configuration.outputImageOrientation = outputImageOrientation;
     CGSize size = configuration.videoSize;
     if(configuration.landscape) {

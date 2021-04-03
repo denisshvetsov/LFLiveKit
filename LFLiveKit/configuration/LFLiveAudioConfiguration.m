@@ -41,6 +41,12 @@
         audioConfig.audioSampleRate = LFLiveAudioSampleRate_48000Hz;
     }
         break;
+    case LFLiveAudioQuality_Tapplive: {
+        audioConfig.numberOfChannels = 1;
+        audioConfig.audioBitrate = LFLiveAudioBitRate_64Kbps;
+        audioConfig.audioSampleRate = LFLiveAudioSampleRate_44100Hz;
+    }
+        break;
     default:{
         audioConfig.audioBitrate = LFLiveAudioBitRate_96Kbps;
         audioConfig.audioSampleRate = LFLiveAudioSampleRate_44100Hz;

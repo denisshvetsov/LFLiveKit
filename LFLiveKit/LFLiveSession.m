@@ -83,7 +83,7 @@
     if (self = [super init]) {
         _audioConfiguration = audioConfiguration;
         _videoConfiguration = videoConfiguration;
-        _adaptiveBitrate = NO;
+        _adaptiveBitrate = YES;
         _captureType = captureType;
     }
     return self;
@@ -196,21 +196,39 @@
     }
 }
 
+- (void)incBitrate:(BOOL)force {
+    NSUInteger videoBitRate = [self.videoEncoder videoBitRate];
+    
+    int delta = (int)_videoConfiguration.videoBitRate / 10;
+    int new_br = (int)videoBitRate + delta;
+    
+    
+    if (new_br <= _videoConfiguration.videoMaxBitRate || force) {
+        videoBitRate = new_br;
+        [self.videoEncoder setVideoBitRate:videoBitRate];
+//        NSLog(@"Increase Bitrate %@", @(videoBitRate));
+    }
+}
+- (void)decBitrate:(BOOL)force {
+    NSUInteger videoBitRate = [self.videoEncoder videoBitRate];
+    
+    int delta = (int)_videoConfiguration.videoBitRate / 5;
+    int new_br =(int)videoBitRate - delta;
+    
+    if ((new_br >=  self.videoConfiguration.videoMinBitRate || force) && new_br>0) {
+        videoBitRate = new_br;
+        [self.videoEncoder setVideoBitRate:videoBitRate];
+//        NSLog(@"Decline Bitrate %@", @(videoBitRate));
+    }
+}
+
+
 - (void)socketBufferStatus:(nullable id<LFStreamSocket>)socket status:(LFLiveBuffferState)status {
     if((self.captureType & LFLiveCaptureMaskVideo || self.captureType & LFLiveInputMaskVideo) && self.adaptiveBitrate){
-        NSUInteger videoBitRate = [self.videoEncoder videoBitRate];
         if (status == LFLiveBuffferDecline) {
-            if (videoBitRate < _videoConfiguration.videoMaxBitRate) {
-                videoBitRate = videoBitRate + 50 * 1000;
-                [self.videoEncoder setVideoBitRate:videoBitRate];
-                NSLog(@"Increase bitrate %@", @(videoBitRate));
-            }
+            [self incBitrate:false];
         } else {
-            if (videoBitRate > self.videoConfiguration.videoMinBitRate) {
-                videoBitRate = videoBitRate - 100 * 1000;
-                [self.videoEncoder setVideoBitRate:videoBitRate];
-                NSLog(@"Decline bitrate %@", @(videoBitRate));
-            }
+            [self decBitrate:false];
         }
     }
 }

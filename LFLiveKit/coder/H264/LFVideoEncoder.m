@@ -36,7 +36,7 @@
         AVVideoHeightKey: @(height),
         AVVideoCompressionPropertiesKey: @{
             AVVideoAverageBitRateKey: @(self.bitrate),
-            AVVideoMaxKeyFrameIntervalKey: @(30 * 2),
+            AVVideoMaxKeyFrameIntervalKey: @(30 * 1),
             AVVideoProfileLevelKey: AVVideoProfileLevelH264Baseline41,
             AVVideoAllowFrameReorderingKey: @NO,
         }

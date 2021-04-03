@@ -44,7 +44,8 @@ typedef NS_ENUM (NSUInteger, LFLiveAudioQuality){
     LFLiveAudioQuality_High = 2,
     /// 超高音频质量 audio sample rate: 48KHz, audio bitrate: 128Kbps
     LFLiveAudioQuality_VeryHigh = 3,
-    /// 默认音频质量 audio sample rate: 44.1KHz, audio bitrate: 96Kbps
+    ///
+    LFLiveAudioQuality_Tapplive = 4,
     LFLiveAudioQuality_Default = LFLiveAudioQuality_High
 };
 
